@@ -30,6 +30,8 @@ if [ "$DRUID_LOGLEVEL" != "-" ]; then
     sed -ri 's/druid.emitter.logging.logLevel=.*/druid.emitter.logging.logLevel='${DRUID_LOGLEVEL}'/g' /opt/druid/conf/druid/_common/common.runtime.properties
 fi
 
+sed -ri 's/XXX/'${DB_TYPE}'/' /opt/druid/conf/druid/_common/common.runtime.properties
+
 if [ "$DRUID_USE_CONTAINER_IP" != "-" ]; then
     ipaddress=`ip a|grep "global eth0"|awk '{print $2}'|awk -F '\/' '{print $1}'`
     sed -ri 's/druid.host=.*/druid.host='${ipaddress}'/g' /opt/druid/conf/druid/$1/runtime.properties
