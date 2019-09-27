@@ -14,7 +14,7 @@ MAINTAINER Maciej Brynski <maciek@brynski.pl>
 # ENV S3_INDEXING_BUCKET druid-indexing
 # ENV S3_ACCESS_KEY      xxxxxxxxxxxx
 # ENV S3_ACCESS_KEY      xxxxxxxxxxxx
-ENV DRUID_VERSION      0.12.3
+ENV DRUID_VERSION      0.16.0-incubating
 
 # Druid env variable
 ENV DRUID_XMX          '-'
@@ -31,9 +31,11 @@ RUN apk update \
     && apk add --no-cache bash curl \
     && mkdir /tmp/druid \
     && curl \
-    http://static.druid.io/artifacts/releases/druid-$DRUID_VERSION-bin.tar.gz | tar -xzf - -C /opt \
-    && ln -s /opt/druid-$DRUID_VERSION /opt/druid
-RUN curl http://static.druid.io/artifacts/releases/mysql-metadata-storage-$DRUID_VERSION.tar.gz | tar -xzf - -C /opt/druid/extensions
+    https://archive.apache.org/dist/incubator/druid/$DRUID_VERSION/apache-druid-$DRUID_VERSION-bin.tar.gz | tar -xzf - -C /opt \
+    && ln -s /opt/apache-druid-$DRUID_VERSION /opt/druid
+
+RUN curl http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar \
+    -o /opt/druid/extensions/mysql-metadata-storage/mysql-connector-java-5.1.38.jar
 
 COPY conf /opt/druid/conf
 COPY start-druid.sh /start-druid.sh
